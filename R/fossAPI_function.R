@@ -1,0 +1,795 @@
+#' API Wrapper for NOAA FOSS Database
+#'
+#' Use simple notation to query the APIs in the FOSS database.
+#' @series Specify the API you want to query. Defaults to NA - acceptable values include landings, trade_data, source_species, gears, itis_history, source_gears, and tsn_species.
+#' @allow_duplicates Specify whether duplicated data should be allowed into the final results. Defaults to FALSE
+#' @list_variables Set to TRUE to list acceptable variables for a series (instead of querying the API). Defaults to FALSE
+#' @tsn API argument. Defaults to NA
+#' @ts_afs_name API argument. Defaults to NA
+#' @in_ts_afs_name API argument. Defaults to NA
+#' @ts_scientific_name API argument. Defaults to NA
+#' @in_ts_scientific_name API argument. Defaults to NA
+#' @region_name API argument. Defaults to NA
+#' @state_name API argument. Defaults to NA
+#' @year API argument. Defaults to NA
+#' @month API argument. Defaults to NA
+#' @pounds API argument. Defaults to NA
+#' @dollars API argument. Defaults to NA
+#' @tot_count API argument. Defaults to NA
+#' @source API argument. Defaults to NA
+#' @collection API argument. Defaults to NA
+#' @hts_number API argument. Defaults to NA
+#' @name API argument. Defaults to NA
+#' @in_name API argument. Defaults to NA
+#' @cntry_code API argument. Defaults to NA
+#' @fao API argument. Defaults to NA
+#' @cntry_name API argument. Defaults to NA
+#' @in_cntry_name API argument. Defaults to NA
+#' @district_code API argument. Defaults to NA
+#' @district_name API argument. Defaults to NA
+#' @in_district_name API argument. Defaults to NA
+#' @edible_code API argument. Defaults to NA
+#' @kilos API argument. Defaults to NA
+#' @val API argument. Defaults to NA
+#' @association API argument. Defaults to NA
+#' @rfmo API argument. Defaults to NA
+#' @nmfs_region_code API argument. Defaults to NA
+#' @source_species_code API argument. Defaults to NA
+#' @ss_name API argument. Defaults to NA
+#' @in_ss_name API argument. Defaults to NA
+#' @nmfs_species_code API argument. Defaults to NA
+#' @source_id API argument. Defaults to NA
+#' @tsn_species_id API argument. Defaults to NA
+#' @gear_id API argument. Defaults to NA
+#' @isscfg API argument. Defaults to NA
+#' @g_name_short API argument. Defaults to NA
+#' @g_name_long API argument. Defaults to NA
+#' @in_g_name_short API argument. Defaults to NA
+#' @in_g_name_long API argument. Defaults to NA
+#' @g_desc API argument. Defaults to NA
+#' @g_level_ind API argument. Defaults to NA
+#' @g_parent_id API argument. Defaults to NA
+#' @old_itis API argument. Defaults to NA
+#' @new_itis API argument. Defaults to NA
+#' @source_gear_code API argument. Defaults to NA
+#' @sg_name API argument. Defaults to NA
+#' @in_sg_name API argument. Defaults to NA
+#' @ts_complex API argument. Defaults to NA
+#' @ts_confidential_name API argument. Defaults to NA
+#' @in_ts_confidential_name API argument. Defaults to NA
+#' @ts_finfish_ind API argument. Defaults to NA
+#' @ts_habitat_ind API argument. Defaults to NA
+#' @protected API argument. Defaults to NA
+#' @reported API argument. Defaults to NA
+#' @family_itis API argument. Defaults to NA
+#' @family_name API argument. Defaults to NA
+#' @in_family_name API argument. Defaults to NA
+#' @superclass_itis API argument. Defaults to NA
+#' @superclass_name API argument. Defaults to NA
+#' @in_superclass_name API argument. Defaults to NA
+#' @ts_kingdom API argument. Defaults to NA
+#' @in_ts_kingdom API argument. Defaults to NA
+#' @genus_itis API argument. Defaults to NA
+#' @genus_name API argument. Defaults to NA
+#' @in_genus_name API argument. Defaults to NA
+#' @family_sc_name API argument. Defaults to NA
+#' @in_family_sc_name API argument. Defaults to NA
+#' @genus_sc_name API argument. Defaults to NA
+#' @in_genus_sc_name API argument. Defaults to NA
+#' fossAPI()
+
+fossAPI <- function(series = NA,
+                    allow_duplicates = FALSE,
+                    list_variables = FALSE,
+                    tsn = NA,
+                    ts_afs_name = NA,
+                    in_ts_afs_name = NA,
+                    ts_scientific_name = NA,
+                    in_ts_scientific_name = NA,
+                    region_name = NA,
+                    state_name = NA,
+                    year = NA,
+                    month = NA,
+                    pounds = NA,
+                    dollars = NA,
+                    tot_count = NA,
+                    source = NA,
+                    collection = NA,
+                    hts_number = NA,
+                    name = NA,
+                    in_name = NA,
+                    cntry_code = NA,
+                    fao = NA,
+                    cntry_name = NA,
+                    in_cntry_name = NA,
+                    district_code = NA,
+                    district_name = NA,
+                    in_district_name = NA,
+                    edible_code = NA,
+                    kilos = NA,
+                    val = NA,
+                    association = NA,
+                    rfmo = NA,
+                    nmfs_region_code = NA,
+                    source_species_code = NA,
+                    ss_name = NA,
+                    in_ss_name = NA,
+                    nmfs_species_code = NA,
+                    source_id = NA,
+                    tsn_species_id = NA,
+                    gear_id = NA,
+                    isscfg = NA,
+                    g_name_short = NA,
+                    g_name_long = NA,
+                    in_g_name_short = NA,
+                    in_g_name_long = NA,
+                    g_desc = NA,
+                    g_level_ind = NA,
+                    g_parent_id = NA,
+                    old_itis = NA,
+                    new_itis = NA,
+                    source_gear_code = NA,
+                    sg_name = NA,
+                    in_sg_name = NA,
+                    ts_complex = NA,
+                    ts_confidential_name = NA,
+                    in_ts_confidential_name = NA,
+                    ts_finfish_ind = NA,
+                    ts_habitat_ind = NA,
+                    protected = NA,
+                    reported = NA,
+                    family_itis = NA,
+                    family_name = NA,
+                    in_family_name = NA,
+                    superclass_itis = NA,
+                    superclass_name = NA,
+                    in_superclass_name = NA,
+                    ts_kingdom = NA,
+                    in_ts_kingdom = NA,
+                    genus_itis = NA,
+                    genus_name = NA,
+                    in_genus_name = NA,
+                    family_sc_name = NA,
+                    in_family_sc_name = NA,
+                    genus_sc_name = NA,
+                    in_genus_sc_name = NA){
+
+  if(!tolower(series) %in% c("landings", "trade_data", "source_species", "gears", "itis_history", "source_gears", "tsn_species")){
+    print("Please enter a data series from the list: landings, trade_data, source_species, gears, itis_history, source_gears, tsn_species")
+    return(NULL)
+  }
+
+  if(list_variables == TRUE){
+
+    if(tolower(series) == "landings"){
+
+      print("Numeric Variables:")
+      print("tsn, year, pounds, dollars, tot_count")
+      print("Character Variables:")
+      print("region_name, state_name, source, collection")
+      print("Name Variables:")
+      print("ts_afs_name/in_ts_afs_name, ts_scientific_name/in_ts_scientific_name")
+
+    }
+
+    if(tolower(series) == "trade_data"){
+
+      print("Numeric Variables:")
+      print("year, hts_number, cntry_code, fao, district_code, kilos, val")
+      print("Character Variables:")
+      print("month, cntry_name, edible_code, source, association, rfmo, nmfs_region_code")
+      print("Name Variables:")
+      print("name/in_name, cntry_name/in_cntry_name, district_name/in_district_name")
+
+    }
+
+    if(tolower(series) == "source_species"){
+
+      print("Numeric Variables:")
+      print("source_species_code, nmfs_species_code, source_id, tsn, tsn_species_id")
+      print("Name Variables:")
+      print("ss_name/in_ss_name")
+
+
+    }
+
+    if(tolower(series) == "gears"){
+
+      print("Numeric Variables:")
+      print("gear_id, g_level_ind, g_parent_id")
+      print("Character Variables:")
+      print("isscfg, g_desc (search in variable)")
+      print("Name Variables:")
+      print("g_name_short/in_g_name_short, g_name_long/in_g_name_long")
+
+    }
+
+    if(tolower(series) == "itis_history"){
+
+      print("Numeric Variables:")
+      print("old_itis, new_itis")
+
+    }
+
+    if(tolower(series) == "source_gears"){
+
+      print("Numeric Variables:")
+      print("gear_id, source_id")
+      print("Character Variables:")
+      print("source_gear_code")
+      print("Name Variables:")
+      print("sg_name/in_sg_name")
+
+    }
+
+    if(tolower(series) == "tsn_species"){
+
+      print("Numeric Variables:")
+      print("tsn_species_id, tsn, family_itis, superclass_itis, genus_itis")
+      print("Character Variables:")
+      print("ts_complex, ts_finfish_ind, ts_habitat_ind, protected, reported")
+      print("Name Variables:")
+      print("ts_afs_name/in_ts_afs_name, ts_scientific_name/in_ts_scientific_name, ts_confidential_name/in_ts_confidential_name, family_name/in_family_name, superclass_name/in_superclass_name, ts_kingdom/in_ts_kingdom, genus_name/in_genus_name, family_sc_name/in_family_sc_name, genus_sc_name/in_genus_sc_name")
+
+    }
+
+  } else {
+
+    # Define the translation functions
+
+    numeric_range = function(variable, m, json_df){
+      for(n in 1:length(variable)){
+        if(stringr::str_detect(variable[n], ":")){
+          temp = stringr::str_split(variable[n], ":")[[1]]
+          temp[temp==""]<-"NULL"
+          json_df[n,m] <- paste0("\"", deparse(substitute(variable)), "\":{\"$between\":[", temp[1], ",", temp[2], "]}")
+        } else {
+          json_df[n,m] <- paste0("\"", deparse(substitute(variable)), "\":\"", variable[n], "\"")
+        }
+      }
+      return(json_df)
+    }
+
+    character_input = function(variable, m, json_df){
+      for(n in 1:length(variable)){
+        json_df[n,m] <- paste0("\"", deparse(substitute(variable)), "\":\"", toupper(variable[n]), "\"")
+      }
+      return(json_df)
+    }
+
+    character_like = function(variable, m, json_df){
+      for(n in 1:length(variable)){
+        json_df[n,m] <- paste0("\"", stringr::str_remove(deparse(substitute(variable)), "in_"), "\":{\"$like\":\"%", toupper(variable[n]), "%\"}")
+      }
+      return(json_df)
+    }
+
+
+    json_df = data.frame() # Initialize the code dataframe
+
+    m = 1 # Set a column counter
+
+    if(tolower(series) == "landings"){
+
+      # Each of these checks to see if there is an input and then transforms it into a URL snippet, checking to see if it's a range, and increments M.
+
+      if(!is.na(tsn[1])){
+        json_df <- numeric_range(tsn, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(ts_afs_name[1]) & is.na(in_ts_afs_name[1])){
+        json_df <- character_input(ts_afs_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_ts_afs_name[1])){
+        json_df <- character_like(in_ts_afs_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(ts_scientific_name[1]) & is.na(in_ts_scientific_name[1])){
+        json_df <- character_input(ts_scientific_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_ts_scientific_name[1])){
+        json_df <- character_like(in_ts_scientific_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(region_name[1])){
+        json_df <- character_input(region_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(state_name[1])){
+        json_df <- character_input(state_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(year[1])){
+        json_df <- numeric_range(year, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(pounds[1])){
+        json_df <- numeric_range(pounds, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(dollars[1])){
+        json_df <- numeric_range(dollars, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(tot_count[1])){
+        json_df <- numeric_range(tot_count, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(source[1])){
+        json_df <- character_input(source, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(collection[1])){
+        json_df <- character_input(collection, m, json_df)
+        m = m+1
+      }
+
+    }
+
+    if(tolower(series) == "trade_data"){
+
+      # Each of these checks to see if there is an input and then transforms it into a URL snippet, checking to see if it's a range, and increments M.
+
+      if(!is.na(year[1])){
+        json_df <- numeric_range(year, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(month[1])){
+        json_df <- character_input(month, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(hts_number[1])){
+        json_df <- numeric_range(hts_number, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(name[1]) & is.na(in_name[1])){
+        json_df <- character_input(name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_name[1])){
+        json_df <- character_like(in_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(cntry_code[1])){
+        json_df <- numeric_range(cntry_code, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(fao[1])){
+        json_df <- numeric_range(fao, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(cntry_name[1]) & is.na(in_cntry_name[1])){
+        json_df <- character_input(cntry_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_cntry_name[1])){
+        json_df <- character_like(in_cntry_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(district_code[1])){
+        json_df <- numeric_range(distric_code, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(district_name[1]) & is.na(in_district_name[1])){
+        json_df <- character_input(district_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_district_name[1])){
+        json_df <- character_like(in_district_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(edible_code[1])){
+        json_df <- character_like(edible_code, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(kilos[1])){
+        json_df <- numeric_range(kilos, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(val[1])){
+        json_df <- numeric_range(val, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(source[1])){
+        json_df <- character_input(source, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(association[1])){
+        json_df <- chharacter_like(association, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(rfmo[1])){
+        json_df <- chharacter_input(rfmo, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(nmfs_region_code[1])){
+        json_df <- chharacter_input(nmfs_region_code, m, json_df)
+        m = m+1
+      }
+    }
+
+    if(tolower(series) == "source_species"){
+
+      # Each of these checks to see if there is an input and then transforms it into a URL snippet, checking to see if it's a range, and increments M.
+
+      if(!is.na(source_species_code[1])){
+        json_df <- numeric_range(source_species_code, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(ss_name[1]) & is.na(in_ss_name[1])){
+        json_df <- character_input(ss_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_ss_name[1])){
+        json_df <- character_like(in_ss_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(nmfs_species_code[1])){
+        json_df <- numeric_range(nmfs_species_code, m, json_df)
+        m = m+1
+      }
+
+
+      if(!is.na(source_id[1])){
+        json_df <- numeric_range(source_id, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(tsn[1])){
+        json_df <- numeric_range(tsn, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(tsn_species_id[1])){
+        json_df <- numeric_range(tsn_species_id, m, json_df)
+        m = m+1
+      }
+    }
+
+    if(tolower(series) == "gears"){
+
+      # Each of these checks to see if there is an input and then transforms it into a URL snippet, checking to see if it's a range, and increments M.
+
+      if(!is.na(gear_id[1])){
+        json_df <- numeric_range(gear_id, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(isscfg[1])){
+        json_df <- character_input(isscfg, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(g_name_short[1]) & is.na(in_g_name_short[1])){
+        json_df <- character_input(g_name_short, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_g_name_short[1])){
+        json_df <- character_like(in_g_name_short, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(g_name_long[1]) & is.na(in_g_name_long[1])){
+        json_df <- character_input(g_name_long, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_g_name_long[1])){
+        json_df <- character_like(in_g_name_long, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(g_desc[1])){
+        json_df <- character_like(g_desc, m, json_df)
+        m = m+1
+      }
+
+
+      if(!is.na(g_level_ind[1])){
+        json_df <- numeric_range(g_level_ind, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(g_parent_id[1])){
+        json_df <- numeric_range(g_parent_id, m, json_df)
+        m = m+1
+      }
+    }
+
+    if(tolower(series) == "itis_history"){
+
+      # Each of these checks to see if there is an input and then transforms it into a URL snippet, checking to see if it's a range, and increments M.
+
+      if(!is.na(old_itis[1])){
+        json_df <- numeric_range(old_itis, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(new_itis[1])){
+        json_df <- numeric_range(new_itis, m, json_df)
+        m = m+1
+      }
+    }
+
+    if(tolower(series) == "source_gears"){
+
+      # Each of these checks to see if there is an input and then transforms it into a URL snippet, checking to see if it's a range, and increments M.
+
+      if(!is.na(source_gear_code[1])){
+        json_df <- character_input(source_gear_code, m, json_df)
+        m = m+1
+      }
+
+
+      if(!is.na(sg_name[1]) & is.na(in_sg_name[1])){
+        json_df <- character_input(sg_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_sg_name[1])){
+        json_df <- character_like(in_sg_name, m, json_df)
+        m = m+1
+      }
+
+
+      if(!is.na(gear_id[1])){
+        json_df <- numeric_range(gear_id, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(source_id[1])){
+        json_df <- numeric_range(source_id, m, json_df)
+        m = m+1
+      }
+    }
+
+    if(tolower(series) == "tsn_species"){
+
+      # Each of these checks to see if there is an input and then transforms it into a URL snippet, checking to see if it's a range, and increments M.
+
+      if(!is.na(tsn_species_id[1])){
+        json_df <- numeric_range(tsn_species_id, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(tsn[1])){
+        json_df <- numeric_range(tsn, m, json_df)
+        m = m+1
+      }
+
+
+      if(!is.na(ts_afs_name[1]) & is.na(in_ts_afs_name[1])){
+        json_df <- character_input(ts_afs_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_ts_afs_name[1])){
+        json_df <- character_like(in_ts_afs_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(ts_scientific_name[1]) & is.na(in_ts_scientific_name[1])){
+        json_df <- character_input(ts_scientific_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_ts_scientific_name[1])){
+        json_df <- character_like(in_ts_scientific_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(ts_confidential_name[1]) & is.na(in_ts_confidential_name[1])){
+        json_df <- character_input(ts_confidential_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_ts_confidential_name[1])){
+        json_df <- character_like(in_ts_confidential_name, m, json_df)
+        m = m+1
+      }
+
+
+      if(!is.na(ts_complex[1])){
+        json_df <- character_input(ts_complex, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(ts_finfish_ind[1])){
+        json_df <- character_input(ts_finfish_ind, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(ts_habitat_ind[1])){
+        json_df <- character_input(ts_habitat_ind, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(protected[1])){
+        json_df <- character_input(protected, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(reported[1])){
+        json_df <- character_input(reported, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(family_itis[1])){
+        json_df <- numeric_range(family_itis, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(family_name[1]) & is.na(in_family_name[1])){
+        json_df <- character_input(family_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_family_name[1])){
+        json_df <- character_like(in_family_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(superclass_itis[1])){
+        json_df <- numeric_range(superclass_itis, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(superclass_name[1]) & is.na(in_superclass_name[1])){
+        json_df <- character_input(superclass_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_superclass_name[1])){
+        json_df <- character_like(in_superclass_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(ts_kingdom[1]) & is.na(in_ts_kingdom[1])){
+        json_df <- character_input(ts_kingdom, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_ts_kingdom[1])){
+        json_df <- character_like(in_ts_kingdom, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(genus_itis[1])){
+        json_df <- numeric_range(genus_itis, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(genus_name[1]) & is.na(in_genus_name[1])){
+        json_df <- character_input(genus_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_genus_name[1])){
+        json_df <- character_like(in_genus_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(family_sc_name[1]) & is.na(in_family_sc_name[1])){
+        json_df <- character_input(family_sc_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_family_sc_name[1])){
+        json_df <- character_like(in_family_sc_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(genus_sc_name[1]) & is.na(in_genus_sc_name[1])){
+        json_df <- character_input(genus_sc_name, m, json_df)
+        m = m+1
+      }
+
+      if(!is.na(in_genus_sc_name[1])){
+        json_df <- character_like(in_genus_sc_name, m, json_df)
+        m = m+1
+      }
+    }
+
+    # Create an expand grid of the code snippets and drops NAs. This pairs each input with each other input (but several lists will make it run long).
+    json_grid = expand.grid(json_df)
+    json_grid = tidyr::drop_na(json_grid)
+
+    json_objects = c() # Initialize a holder for the final json objects
+
+    # Iterates through the expand grid, forms the json objects, and places them in the holder.
+    for(n in 1:length(json_grid$V1)){
+      temp = "{"
+      for(m in 1:length(json_grid)){
+        temp = paste0(temp, json_grid[n,m])
+        if(m < length(json_grid)){
+          temp = paste0(temp, ", ")
+        } else {
+          temp = paste0(temp, "}")
+        }
+      }
+      json_objects = append(json_objects, temp)
+    }
+    print(json_objects)
+
+    api_output = data.frame() # Initializes a holder for the API output
+
+    # Iterates through the json objects and calls the API
+    for(n in json_objects){
+      if(n>25){
+        print("There are a lot of json_objects here... Did you use a numeric range by accident?")
+      }
+
+      url = paste0("https://apps-st.fisheries.noaa.gov/ods/foss/", tolower(series), "/")
+      temp = httr::GET(url, query = list(q = eval(n), limit = 10000))
+      if(temp$status_code==503){
+        print("API Service Temporarily Unavailable")
+        return(NULL)
+      }
+      tomp = jsonlite::fromJSON(rawToChar(temp$content))
+      api_output = dplyr::bind_rows(api_output, tomp$items)
+      counter = 0
+
+      # Checks to see if there is more data on the next page and grabs it if so
+      while(tomp$hasMore==TRUE){
+        link = tomp$links$href[tomp$links$rel=="next"]
+        temp = httr::GET(link)
+        tomp = jsonlite::fromJSON(rawToChar(temp$content))
+        api_output = dplyr::bind_rows(api_output, tomp$items)
+        counter = counter +1
+        if(counter>10){
+          print("This is taking a suspiciously long time...")
+        }
+      }
+
+    }
+
+    if(length(api_output)==0){
+      print("Empty Dataset")
+      return(NULL)
+    }
+
+    # Each entry has a unique link and there is risk of duplication with this wrapper method, so this filters duplicates out (unless otherwise specified).
+    if(allow_duplicates==FALSE){
+      api_output = dplyr::filter(api_output, !duplicated(links))
+    }
+
+    # Returns the output
+    return(api_output)
+  }
+}
