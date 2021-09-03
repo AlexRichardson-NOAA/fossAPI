@@ -93,7 +93,25 @@ query_foss(
 )
 }
 \description{
-Use simple notation to query the APIs in the FOSS database.
+The query_foss() function is designed to help the R-using public use simple notation to query the APIs in the FOSS database.
+There are currently seven FOSS APIs that can be accessed through the fossAPI package: landings, trade_data, source_species, gears, itis_history, source_gears, and tsn_species.
+Each API has a number of variables that one can use to limit the results of a query. To access these variables, specify one of the APIs above with the "series" argument and
+set the "list_variables" argument to TRUE.
+}
+\details{
+There are three types of variable - numeric, character, and name.
+
+Numeric variables are coded in the data as numeric, but should still be input as strings in order to avoid over-taxing the FOSS system. For example,
+the range between 100 and 200 should be specified as "100:200" - not 100:200. Multiple ranges can be input together as a list: c("100:200", "300:400")
+will return all results between 100 and 200 and between 300 and 400, but will exclude any results below 100, between 200 and 300, and above 400. (Note
+that some data fields seem like they should be numeric but were specified in the data as characters.)
+
+Character variables must be entered as precise, non-case-sensitive string matches. For example, the arguments state_name = "california" or state_name
+= "CALIFORNIA" will return all results from the state of California, but state_name = "cali" will return no matches.
+
+Name variables may be specified either as precise, non-case-sensitive string matches or as partial matches using the "in_" modified version of their
+variable name. For example, the argument ts_afs_name = "shrimp" will return no matches, but ts_afs_name = "shrimp, peppermint" does. However, the
+argument in_ts_afs_name = "shrimp" will return all arguments for which the field ts_afs_name includes the string "shrimp".
 }
 \concept{_itis API argument. Defaults to NA}
 \concept{_name API argument. Defaults to NA}
