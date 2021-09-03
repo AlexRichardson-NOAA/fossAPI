@@ -19,6 +19,9 @@
 #' variable name. For example, the argument ts_afs_name = "shrimp" will return no matches, but ts_afs_name = "shrimp, peppermint" does. However, the
 #' argument in_ts_afs_name = "shrimp" will return all arguments for which the field ts_afs_name includes the string "shrimp".
 #'
+#' Example:
+#'
+#' landings_data = query_foss(series = "landings", in_ts_afs_name = c("shrimp", "fish"), pounds = c("0:1000", "5000:10000"), collection = "commercial", list_variables = F)
 #'
 #' @series Specify the API you want to query. Defaults to NA
 #' @allow_duplicates Specify whether duplicated data should be allowed into the final results. Defaults to FALSE
