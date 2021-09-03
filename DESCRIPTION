@@ -9,6 +9,12 @@ Authors@R:
 Description: Use simple notation to query the APIs in the FOSS database. This currently includes the following APIs: landings, trade_data, source_species, gears, itis_history, source_gears, and tsn_species. 
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license
+Imports: 
+    stringr,
+    tidyr,
+    httr,
+    jsonlite,
+    dplyr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

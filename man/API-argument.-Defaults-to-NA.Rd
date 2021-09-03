@@ -2,7 +2,7 @@
 % Please edit documentation in R/fossAPI_function.R
 \name{API argument. Defaults to NA}
 \alias{API argument. Defaults to NA}
-\alias{fossAPI}
+\alias{query_foss}
 \title{API Wrapper for NOAA FOSS Database}
 \source{
 API argument. Defaults to NA
@@ -14,7 +14,7 @@ _id API argument. Defaults to NA
 _gear_code API argument. Defaults to NA
 }
 \usage{
-fossAPI(
+query_foss(
   series = NA,
   allow_duplicates = FALSE,
   list_variables = FALSE,
