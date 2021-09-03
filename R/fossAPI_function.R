@@ -96,7 +96,6 @@
 #' @genus_sc_name API argument. Defaults to NA
 #' @in_genus_sc_name API argument. Defaults to NA
 #' @export
-#' query_foss()
 
 query_foss <- function(series = NA,
                     allow_duplicates = FALSE,
