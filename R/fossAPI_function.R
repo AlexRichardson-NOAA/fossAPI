@@ -76,9 +76,9 @@
 #' @in_family_sc_name API argument. Defaults to NA
 #' @genus_sc_name API argument. Defaults to NA
 #' @in_genus_sc_name API argument. Defaults to NA
-#' fossAPI()
+#' query_foss()
 
-fossAPI <- function(series = NA,
+query_foss <- function(series = NA,
                     allow_duplicates = FALSE,
                     list_variables = FALSE,
                     tsn = NA,
