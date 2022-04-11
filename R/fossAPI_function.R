@@ -38,10 +38,10 @@
 #' @pounds API argument. Defaults to NA
 #' @dollars API argument. Defaults to NA
 #' @tot_count API argument. Defaults to NA
-#' @source API argument. Defaults to NA
+#' @\source API argument. Defaults to NA
 #' @collection API argument. Defaults to NA
 #' @hts_number API argument. Defaults to NA
-#' @name API argument. Defaults to NA
+#' @\name API argument. Defaults to NA
 #' @in_name API argument. Defaults to NA
 #' @cntry_code API argument. Defaults to NA
 #' @fao API argument. Defaults to NA
@@ -56,11 +56,11 @@
 #' @association API argument. Defaults to NA
 #' @rfmo API argument. Defaults to NA
 #' @nmfs_region_code API argument. Defaults to NA
-#' @source_species_code API argument. Defaults to NA
+#' @\source_species_code API argument. Defaults to NA
 #' @ss_name API argument. Defaults to NA
 #' @in_ss_name API argument. Defaults to NA
 #' @nmfs_species_code API argument. Defaults to NA
-#' @source_id API argument. Defaults to NA
+#' @\source_id API argument. Defaults to NA
 #' @tsn_species_id API argument. Defaults to NA
 #' @gear_id API argument. Defaults to NA
 #' @isscfg API argument. Defaults to NA
@@ -73,7 +73,7 @@
 #' @g_parent_id API argument. Defaults to NA
 #' @old_itis API argument. Defaults to NA
 #' @new_itis API argument. Defaults to NA
-#' @source_gear_code API argument. Defaults to NA
+#' @\source_gear_code API argument. Defaults to NA
 #' @sg_name API argument. Defaults to NA
 #' @in_sg_name API argument. Defaults to NA
 #' @ts_complex API argument. Defaults to NA
@@ -83,8 +83,8 @@
 #' @ts_habitat_ind API argument. Defaults to NA
 #' @protected API argument. Defaults to NA
 #' @reported API argument. Defaults to NA
-#' @family_itis API argument. Defaults to NA
-#' @family_name API argument. Defaults to NA
+#' @\family_itis API argument. Defaults to NA
+#' @\family_name API argument. Defaults to NA
 #' @in_family_name API argument. Defaults to NA
 #' @superclass_itis API argument. Defaults to NA
 #' @superclass_name API argument. Defaults to NA
@@ -94,7 +94,7 @@
 #' @genus_itis API argument. Defaults to NA
 #' @genus_name API argument. Defaults to NA
 #' @in_genus_name API argument. Defaults to NA
-#' @family_sc_name API argument. Defaults to NA
+#' @\family_sc_name API argument. Defaults to NA
 #' @in_family_sc_name API argument. Defaults to NA
 #' @genus_sc_name API argument. Defaults to NA
 #' @in_genus_sc_name API argument. Defaults to NA
@@ -257,9 +257,21 @@ query_foss <- function(series = NA,
 
   } else {
 
+    # Define a utility function
+
+    toUpperFirst <- function(string){
+      split.string <- strsplit(trimws(tolower(string), which = "both"), split = "")[[1]]
+      return.string <- gsub(", ","",toString(append(toupper(split.string[1]), split.string[2:length(split.string)])))
+      return(return.string)
+    }
+
+    ranger <- function(x) if (length(x) == 1) x else paste(x[1], x[length(x)], sep = ":")
+
+
     # Define the translation functions
 
     numeric_range = function(variable, m, json_df){
+      variable <- as.data.frame(tapply(variable, cumsum(c(TRUE, diff(variable) != 1)), ranger))[,1]
       for(n in 1:length(variable)){
         if(stringr::str_detect(variable[n], ":")){
           temp = stringr::str_split(variable[n], ":")[[1]]
@@ -272,16 +284,40 @@ query_foss <- function(series = NA,
       return(json_df)
     }
 
-    character_input = function(variable, m, json_df){
+    character_input = function(variable, m, json_df, type = "Upper"){
       for(n in 1:length(variable)){
-        json_df[n,m] <- paste0("\"", deparse(substitute(variable)), "\":\"", toupper(variable[n]), "\"")
+        if(type == "Upper"){
+          json_df[n,m] <- paste0("\"", deparse(substitute(variable)), "\":\"", toupper(variable[n]), "\"")
+        }
+        if(type == "Title"){
+          json_df[n,m] <- paste0("\"", deparse(substitute(variable)), "\":\"", toUpperFirst(variable[n]), "\"")
+        }
+        if(type == "Lower"){
+          json_df[n,m] <- paste0("\"", deparse(substitute(variable)), "\":\"", tolower(variable[n]), "\"")
+        }
+        if(type == "Exact"){
+          json_df[n,m] <- paste0("\"", deparse(substitute(variable)), "\":\"", variable[n], "\"")
+        }
       }
       return(json_df)
     }
 
-    character_like = function(variable, m, json_df){
+    character_input_title = function(variable, m, json_df, option){
       for(n in 1:length(variable)){
-        json_df[n,m] <- paste0("\"", stringr::str_remove(deparse(substitute(variable)), "in_"), "\":{\"$like\":\"%", toupper(variable[n]), "%\"}")
+        json_df[n,m] <- paste0("\"", deparse(substitute(variable)), "\":\"", toUpperFirst(tolower(variable[n])), "\"")
+      }
+      return(json_df)
+    }
+
+    character_like = function(variable, m, json_df, type = "Upper"){
+      for(n in 1:length(variable)){
+        if(type == "Upper"){
+          json_df[n,m] <- paste0("\"", stringr::str_remove(deparse(substitute(variable)), "in_"), "\":{\"$like\":\"%", toupper(variable[n]), "%\"}")
+        }
+        if(type == "Title"){
+          json_df[n,m] <- paste0("\"", stringr::str_remove(deparse(substitute(variable)), "in_"), "\":{\"$like\":\"%", tolower(variable[n]), "%\"}")
+          json_df[n,m] <- paste0("\"", stringr::str_remove(deparse(substitute(variable)), "in_"), "\":{\"$like\":\"%", toUpperFirst(variable[n]), "%\"}")
+        }
       }
       return(json_df)
     }
@@ -311,17 +347,17 @@ query_foss <- function(series = NA,
       }
 
       if(!is.na(ts_scientific_name[1]) & is.na(in_ts_scientific_name[1])){
-        json_df <- character_input(ts_scientific_name, m, json_df)
+        json_df <- character_input(ts_scientific_name, m, json_df, type = "Title")
         m = m+1
       }
 
       if(!is.na(in_ts_scientific_name[1])){
-        json_df <- character_like(in_ts_scientific_name, m, json_df)
+        json_df <- character_like(in_ts_scientific_name, m, json_df, type = "Title")
         m = m+1
       }
 
       if(!is.na(region_name[1])){
-        json_df <- character_input(region_name, m, json_df)
+        json_df <- character_input_title(region_name, m, json_df, type = "Exact")
         m = m+1
       }
 
@@ -356,7 +392,7 @@ query_foss <- function(series = NA,
       }
 
       if(!is.na(collection[1])){
-        json_df <- character_input(collection, m, json_df)
+        json_df <- character_input_title(collection, m, json_df, type = "Title")
         m = m+1
       }
 
@@ -372,7 +408,7 @@ query_foss <- function(series = NA,
       }
 
       if(!is.na(month[1])){
-        json_df <- character_input(month, m, json_df)
+        json_df <- character_input(month, m, json_df, type = "Exact")
         m = m+1
       }
 
@@ -412,7 +448,7 @@ query_foss <- function(series = NA,
       }
 
       if(!is.na(district_code[1])){
-        json_df <- numeric_range(distric_code, m, json_df)
+        json_df <- numeric_range(district_code, m, json_df)
         m = m+1
       }
 
@@ -447,17 +483,17 @@ query_foss <- function(series = NA,
       }
 
       if(!is.na(association[1])){
-        json_df <- chharacter_like(association, m, json_df)
+        json_df <- character_like(association, m, json_df)
         m = m+1
       }
 
       if(!is.na(rfmo[1])){
-        json_df <- chharacter_input(rfmo, m, json_df)
+        json_df <- character_input(rfmo, m, json_df)
         m = m+1
       }
 
       if(!is.na(nmfs_region_code[1])){
-        json_df <- chharacter_input(nmfs_region_code, m, json_df)
+        json_df <- character_input(nmfs_region_code, m, json_df)
         m = m+1
       }
     }
@@ -538,7 +574,7 @@ query_foss <- function(series = NA,
       }
 
       if(!is.na(g_desc[1])){
-        json_df <- character_like(g_desc, m, json_df)
+        json_df <- character_like(g_desc, m, json_df, type = "Title")
         m = m+1
       }
 
@@ -585,7 +621,7 @@ query_foss <- function(series = NA,
       }
 
       if(!is.na(in_sg_name[1])){
-        json_df <- character_like(in_sg_name, m, json_df)
+        json_df <- character_like(in_sg_name, m, json_df, type = "Title")
         m = m+1
       }
 
@@ -627,12 +663,12 @@ query_foss <- function(series = NA,
       }
 
       if(!is.na(ts_scientific_name[1]) & is.na(in_ts_scientific_name[1])){
-        json_df <- character_input(ts_scientific_name, m, json_df)
+        json_df <- character_input(ts_scientific_name, m, json_df, type = "Title")
         m = m+1
       }
 
       if(!is.na(in_ts_scientific_name[1])){
-        json_df <- character_like(in_ts_scientific_name, m, json_df)
+        json_df <- character_like(in_ts_scientific_name, m, json_df, type = "Title")
         m = m+1
       }
 
@@ -648,7 +684,7 @@ query_foss <- function(series = NA,
 
 
       if(!is.na(ts_complex[1])){
-        json_df <- character_input(ts_complex, m, json_df)
+        json_df <- character_input(ts_complex, m, json_df, type = "Title")
         m = m+1
       }
 
@@ -703,12 +739,12 @@ query_foss <- function(series = NA,
       }
 
       if(!is.na(ts_kingdom[1]) & is.na(in_ts_kingdom[1])){
-        json_df <- character_input(ts_kingdom, m, json_df)
+        json_df <- character_input(ts_kingdom, m, json_df, type = "Title")
         m = m+1
       }
 
       if(!is.na(in_ts_kingdom[1])){
-        json_df <- character_like(in_ts_kingdom, m, json_df)
+        json_df <- character_like(in_ts_kingdom, m, json_df, type = "Title")
         m = m+1
       }
 
@@ -783,6 +819,7 @@ query_foss <- function(series = NA,
 
       url = paste0("https://apps-st.fisheries.noaa.gov/ods/foss/", tolower(series), "/")
       temp = httr::GET(url, query = list(q = eval(n), limit = 10000))
+      print(temp)
       if(temp$status_code==503){
         print("API Service Temporarily Unavailable")
         return(NULL)
@@ -799,7 +836,7 @@ query_foss <- function(series = NA,
         api_output = dplyr::bind_rows(api_output, tomp$items)
         counter = counter +1
         if(counter>10){
-          print("This is taking a suspiciously long time...")
+          print("This is taking a suspiciously long time... Is your computer connected to the internet?")
         }
       }
 
@@ -812,7 +849,7 @@ query_foss <- function(series = NA,
 
     # Each entry has a unique link and there is risk of duplication with this wrapper method, so this filters duplicates out (unless otherwise specified).
     if(allow_duplicates==FALSE){
-      api_output = dplyr::filter(api_output, !duplicated(links))
+      api_output = dplyr::filter(api_output, !duplicated(api_output$links))
     }
 
     # Returns the output
