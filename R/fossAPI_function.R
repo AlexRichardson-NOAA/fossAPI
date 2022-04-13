@@ -302,13 +302,6 @@ query_foss <- function(series = NA,
       return(json_df)
     }
 
-    character_input_title = function(variable, m, json_df, option){
-      for(n in 1:length(variable)){
-        json_df[n,m] <- paste0("\"", deparse(substitute(variable)), "\":\"", toUpperFirst(tolower(variable[n])), "\"")
-      }
-      return(json_df)
-    }
-
     character_like = function(variable, m, json_df, type = "Upper"){
       for(n in 1:length(variable)){
         if(type == "Upper"){
@@ -357,7 +350,7 @@ query_foss <- function(series = NA,
       }
 
       if(!is.na(region_name[1])){
-        json_df <- character_input_title(region_name, m, json_df, type = "Exact")
+        json_df <- character_input(region_name, m, json_df, type = "Exact")
         m = m+1
       }
 
@@ -392,7 +385,7 @@ query_foss <- function(series = NA,
       }
 
       if(!is.na(collection[1])){
-        json_df <- character_input_title(collection, m, json_df, type = "Title")
+        json_df <- character_input(collection, m, json_df, type = "Title")
         m = m+1
       }
 
