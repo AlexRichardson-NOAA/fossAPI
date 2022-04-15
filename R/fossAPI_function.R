@@ -280,7 +280,9 @@ query_foss <- function(series = NA,
           variable.cha = append(variable.cha, variable[n])
         }
       }
-      variable.num <- as.data.frame(tapply(variable.num, cumsum(c(TRUE, diff(variable.num) != 1)), ranger))[,1]
+      if(!is.null(variable.num)){
+        variable.num <- as.data.frame(tapply(variable.num, cumsum(c(TRUE, diff(variable.num) != 1)), ranger))[,1]
+      }
       variable = append(variable.num, variable.cha)
       for(n in 1:length(variable)){
         if(stringr::str_detect(variable[n], ":")){
