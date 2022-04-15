@@ -271,7 +271,17 @@ query_foss <- function(series = NA,
     # Define the translation functions
 
     numeric_range = function(variable, m, json_df){
-      variable <- as.data.frame(tapply(variable, cumsum(c(TRUE, diff(variable) != 1)), ranger))[,1]
+      variable.num = c()
+      variable.cha = c()
+      for(n in 1:length(variable)){
+        if(!is.na(as.numeric(variable[n]))){
+          variable.num = append(variable.num, as.numeric(variable[n]))
+        } else {
+          variable.cha = append(variable.cha, variable[n])
+        }
+      }
+      variable.num <- as.data.frame(tapply(variable.num, cumsum(c(TRUE, diff(variable.num) != 1)), ranger))[,1]
+      variable = append(variable.num, variable.cha)
       for(n in 1:length(variable)){
         if(stringr::str_detect(variable[n], ":")){
           temp = stringr::str_split(variable[n], ":")[[1]]
