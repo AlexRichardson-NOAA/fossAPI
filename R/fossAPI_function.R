@@ -283,14 +283,14 @@ query_foss <- function(series = NA,
       if(!is.null(variable.num)){
         variable.num <- as.data.frame(tapply(variable.num, cumsum(c(TRUE, diff(variable.num) != 1)), ranger))[,1]
       }
-      variable = append(variable.num, variable.cha)
-      for(n in 1:length(variable)){
-        if(stringr::str_detect(variable[n], ":")){
-          temp = stringr::str_split(variable[n], ":")[[1]]
+      variable.all = append(variable.num, variable.cha)
+      for(n in 1:length(variable.all)){
+        if(stringr::str_detect(variable.all[n], ":")){
+          temp = stringr::str_split(variable.all[n], ":")[[1]]
           temp[temp==""]<-"NULL"
           json_df[n,m] <- paste0("\"", deparse(substitute(variable)), "\":{\"$between\":[", temp[1], ",", temp[2], "]}")
         } else {
-          json_df[n,m] <- paste0("\"", deparse(substitute(variable)), "\":\"", variable[n], "\"")
+          json_df[n,m] <- paste0("\"", deparse(substitute(variable)), "\":\"", variable.all[n], "\"")
         }
       }
       return(json_df)
